@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora con JavaScript</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let display = document.getElementById('display');
+            let firstOperand = '';
+            let secondOperand = '';
+            let operator = '';
+            let result = '';
+
+            // Función para manejar las teclas del teclado
+            document.addEventListener('keydown', function (event) {
+                let key = event.key;
+                if (!isNaN(key) || key === '.') {
+                    // Si es un número o un punto decimal
+                    display.value += key;
+                } else if (['+', '-', '*', '/'].includes(key)) {
+                    firstOperand = display.value;
+                    operator = key;
+                    display.value = '';
+                } else if (key === 'Enter') {
+                    performCalculation();
+                } else if (key === 'Escape') {
+                    clearDisplay();
+                }
+            });
+
+            // Función para manejar el clic en los botones
+            document.querySelectorAll('.calc-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const value = this.value;
+                    if (!isNaN(value) || value === '.') {
+                        display.value += value;
+                    } else if (['+', '-', '*', '/'].includes(value)) {
+                        firstOperand = display.value;
+                        operator = value;
+                        display.value = '';
+                    } else if (value === '=') {
+                        performCalculation();
+                    } else if (value === 'C') {
+                        clearDisplay();
+                    }
+                });
+            });
+
+            // Función para realizar la operación
+            function performCalculation() {
+                secondOperand = display.value;
+                if (firstOperand !== '' && secondOperand !== '' && operator !== '') {
+                    let calcResult;
+                    switch (operator) {
+                        case '+':
+                            calcResult = parseFloat(firstOperand) + parseFloat(secondOperand);
+                            break;
+                        case '-':
+                            calcResult = parseFloat(firstOperand) - parseFloat(secondOperand);
+                            break;
+                        case '*':
+                            calcResult = parseFloat(firstOperand) * parseFloat(secondOperand);
+                            break;
+                        case '/':
+                            calcResult = secondOperand != 0 ? parseFloat(firstOperand) / parseFloat(secondOperand) : 'Error';
+                            break;
+                    }
+                    display.value = calcResult;
+                    firstOperand = '';
+                    secondOperand = '';
+                    operator = '';
+                }
+            }
+
+            // Función para limpiar la pantalla
+            function clearDisplay() {
+                display.value = '';
+                firstOperand = '';
+                secondOperand = '';
+                operator = '';
+            }
+        });
+    </script>
+</head>
+<body class="bg-gray-100 flex justify-center items-center h-screen">
+
+    <div class="bg-white p-6 rounded-lg shadow-lg max-w-xs">
+        <!-- Pantalla de la calculadora -->
+        <div class="mb-4">
+            <input type="text" id="display" class="w-full p-3 text-right bg-gray-100 text-2xl rounded" 
+                   placeholder="0" disabled />
+        </div>
+
+        <!-- Botones de la calculadora -->
+        <div class="grid grid-cols-4 gap-3">
+            <button value="7" class="p-4 bg-gray-200 rounded text-xl calc-btn">7</button>
+            <button value="8" class="p-4 bg-gray-200 rounded text-xl calc-btn">8</button>
+            <button value="9" class="p-4 bg-gray-200 rounded text-xl calc-btn">9</button>
+            <button value="/" class="p-4 bg-yellow-400 rounded text-xl calc-btn">/</button>
+
+            <button value="4" class="p-4 bg-gray-200 rounded text-xl calc-btn">4</button>
+            <button value="5" class="p-4 bg-gray-200 rounded text-xl calc-btn">5</button>
+            <button value="6" class="p-4 bg-gray-200 rounded text-xl calc-btn">6</button>
+            <button value="*" class="p-4 bg-yellow-400 rounded text-xl calc-btn">*</button>
+
+            <button value="1" class="p-4 bg-gray-200 rounded text-xl calc-btn">1</button>
+            <button value="2" class="p-4 bg-gray-200 rounded text-xl calc-btn">2</button>
+            <button value="3" class="p-4 bg-gray-200 rounded text-xl calc-btn">3</button>
+            <button value="-" class="p-4 bg-yellow-400 rounded text-xl calc-btn">-</button>
+
+            <button value="0" class="p-4 bg-gray-200 rounded text-xl calc-btn">0</button>
+            <button value="." class="p-4 bg-gray-200 rounded text-xl calc-btn">.</button>
+            <button value="=" class="p-4 bg-yellow-400 rounded text-xl calc-btn">=</button>
+            <button value="+" class="p-4 bg-yellow-400 rounded text-xl calc-btn">+</button>
+
+            <!-- Botón para limpiar la pantalla -->
+            <button value="C" class="col-span-4 p-4 bg-red-400 rounded text-xl calc-btn">C</button>
+        </div>
+    </div>
+
+</body>
+</html>
